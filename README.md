@@ -47,9 +47,25 @@ All processing is **local, in-page, and synchronous.**
 | No `innerHTML` | ESLint `no-restricted-properties`; string-only core. |
 | No credential access | Extension declares no such permissions; content script reads text only. |
 | Local-only processing | Core is pure functions; no I/O anywhere. |
-| Minimal permissions | Extension requests only `storage`; empty `host_permissions`. |
+| Minimal permissions | Extension requests only `activeTab` + `storage`; empty `host_permissions`. |
 
-See [SECURITY.md](./SECURITY.md) and [docs/security.md](./docs/security.md).
+## Security & privacy documentation
+
+Security-first design, **designed to align with** secure-development principles
+from NIST SSDF, CISA Secure by Design, OWASP ASVS, and Israeli National Cyber
+Directorate supply-chain guidance. This is a self-assessment, not a third-party
+certification.
+
+| Document | What it covers |
+| --- | --- |
+| [SECURITY.md](./SECURITY.md) | Security policy and vulnerability reporting. |
+| [docs/SECURITY.md](./docs/SECURITY.md) | Security overview and controls. |
+| [docs/PRIVACY.md](./docs/PRIVACY.md) | Privacy guarantees (no telemetry, local-only). |
+| [docs/THREAT_MODEL.md](./docs/THREAT_MODEL.md) | Assets, threats and mitigations. |
+| [docs/COMPLIANCE_MATRIX.md](./docs/COMPLIANCE_MATRIX.md) | Framework self-assessment mapping. |
+| [docs/SUPPLY_CHAIN.md](./docs/SUPPLY_CHAIN.md) | Dependency and release supply-chain practices. |
+| [docs/EXTENSION_SECURITY.md](./docs/EXTENSION_SECURITY.md) | Browser-extension security model. |
+| [docs/RELEASE_SECURITY.md](./docs/RELEASE_SECURITY.md) | Pre-release security checklist. |
 
 ## Repository layout
 

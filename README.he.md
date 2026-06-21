@@ -49,9 +49,24 @@
 | ללא `innerHTML` | חסימה ב‑ESLint; הליבה עובדת על מחרוזות בלבד. |
 | ללא גישה לפרטי הזדהות | התוסף אינו מבקש הרשאות כאלה. |
 | עיבוד מקומי בלבד | הליבה היא פונקציות טהורות, ללא קלט/פלט. |
-| הרשאות מינימליות | התוסף מבקש רק `storage`. |
+| הרשאות מינימליות | התוסף מבקש רק `activeTab` ו‑`storage`. |
 
-ראו [SECURITY.md](./SECURITY.md) ו‑[docs/security.md](./docs/security.md).
+## תיעוד אבטחה ופרטיות
+
+תכנון מאובטח מיסודו, **שמתוכנן להתיישר** עם עקרונות פיתוח מאובטח של
+NIST SSDF, CISA Secure by Design, OWASP ASVS והנחיות שרשרת האספקה של מערך הסייבר
+הלאומי. מדובר בהערכה עצמית, לא בהסמכה של גורם חיצוני.
+
+| מסמך | תוכן |
+| --- | --- |
+| [SECURITY.md](./SECURITY.md) | מדיניות אבטחה ודיווח על פגיעויות. |
+| [docs/SECURITY.md](./docs/SECURITY.md) | סקירת אבטחה ובקרות. |
+| [docs/PRIVACY.md](./docs/PRIVACY.md) | התחייבויות פרטיות (ללא טלמטריה, מקומי בלבד). |
+| [docs/THREAT_MODEL.md](./docs/THREAT_MODEL.md) | נכסים, איומים והגנות. |
+| [docs/COMPLIANCE_MATRIX.md](./docs/COMPLIANCE_MATRIX.md) | מיפוי הערכה עצמית מול מסגרות. |
+| [docs/SUPPLY_CHAIN.md](./docs/SUPPLY_CHAIN.md) | נוהלי שרשרת אספקה ותלויות. |
+| [docs/EXTENSION_SECURITY.md](./docs/EXTENSION_SECURITY.md) | מודל האבטחה של תוסף הדפדפן. |
+| [docs/RELEASE_SECURITY.md](./docs/RELEASE_SECURITY.md) | רשימת בדיקות לפני שחרור גרסה. |
 
 ## התחלה מהירה
 
