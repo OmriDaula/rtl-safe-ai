@@ -1,0 +1,57 @@
+name: Bug report
+description: Report incorrect RTL detection, rendering, or other broken behavior.
+title: '[Bug]: '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please do **not** include
+        private prompts or sensitive text — share a minimal, reproducible
+        sample instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+      placeholder: Hebrew text starting with a URL was rendered left-to-right.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Include a minimal text sample and the steps you took.
+      placeholder: |
+        1. Open the demo / chat site …
+        2. Paste this text: "…"
+        3. Observe …
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Core engine (@rtl-safe-ai/core)
+        - Browser extension
+        - Demo app
+        - Documentation
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser + version, Node version (if building locally).
+      placeholder: macOS 14, Chrome 126, Node 20.16
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Screenshots or notes. Redact anything sensitive.
+    validations:
+      required: false

@@ -2,6 +2,13 @@
 
 **A security-first, open-source RTL engine for AI chat interfaces.**
 
+[![CI](https://github.com/OmriDaula/rtl-safe-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/OmriDaula/rtl-safe-ai/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/OmriDaula/rtl-safe-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/OmriDaula/rtl-safe-ai/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg)](https://www.typescriptlang.org/)
+[![Tests](https://img.shields.io/badge/tests-111%20passing-success.svg)](./tests)
+[![No telemetry](https://img.shields.io/badge/privacy-no%20telemetry%20%C2%B7%20local--only-brightgreen.svg)](./docs/PRIVACY.md)
+
 `rtl-safe-ai` fixes how right-to-left languages — Hebrew, Arabic, Persian, Urdu,
 Yiddish and more — are displayed in AI chat UIs, where mixed-direction text is
 routinely mangled. It does this with a small, dependency-free, **local-only**
@@ -9,17 +16,41 @@ engine that never touches your data.
 
 > 🇮🇱 עברית: see [README.he.md](./README.he.md)
 
-> **Status:** early scaffold. The architecture, configs and public API are in
-> place; the detection/bidi logic is not yet implemented.
+> **Not formally certified.** This project is **designed to align with**
+> recognized secure-development principles (NIST SSDF, CISA Secure by Design,
+> OWASP ASVS, and Israeli National Cyber Directorate supply-chain guidance). It
+> is not certified or approved by any third party — see the
+> [security documentation](#security--privacy-documentation).
 
 ---
 
-## What this project is
+## The problem
 
-- A **pure TypeScript core** (`@rtl-safe-ai/core`) for RTL detection and
-  bidi-safe text handling.
-- A **Manifest V3 browser extension** that applies fixes to AI chat pages.
-- A **Vite + React demo** to explore the engine.
+AI chat interfaces are built LTR-first. When a response mixes Hebrew or Arabic
+with English, code, URLs, file paths, or math, the bidirectional (bidi)
+algorithm often renders it in a confusing order: sentences flip, punctuation
+jumps to the wrong side, and a leading URL can force an entire RTL paragraph to
+display left-to-right. Worse, invisible Unicode and bidi-override characters can
+be used to **spoof** displayed text ("Trojan Source") or hide instructions.
+
+## The solution
+
+A pure TypeScript engine that detects the correct base direction of mixed text,
+keeps code and math LTR, and neutralizes unsafe/invisible control characters —
+all **locally, in memory, with no network access**. The same engine powers a
+browser extension and a demo app.
+
+## Features
+
+- 🔤 **Smart direction detection** for Hebrew, Arabic, Persian, Urdu, Yiddish,
+  Syriac, Thaana, N'Ko, Adlam and more.
+- 🧩 **Mixed-content aware** — keeps URLs, file paths, code, and LaTeX/math LTR
+  while resolving the surrounding sentence correctly.
+- 📊 **Markdown table direction** detection via cell-majority voting.
+- 🛡️ **Bidi-safety**: strips Trojan-Source override characters and neutralizes
+  invisible/zero-width Unicode; `isPlainTextSafe()` flags abuse.
+- 🧪 **Well-tested**: 111 tests, including security invariants.
+- 🧱 **Zero runtime dependencies** in the core; pure, synchronous functions.
 
 ## What this project will NEVER do
 
@@ -48,6 +79,12 @@ All processing is **local, in-page, and synchronous.**
 | No credential access | Extension declares no such permissions; content script reads text only. |
 | Local-only processing | Core is pure functions; no I/O anywhere. |
 | Minimal permissions | Extension requests only `activeTab` + `storage`; empty `host_permissions`. |
+
+## Privacy guarantees
+
+No telemetry, no analytics, no tracking, no network requests. Your text is never
+collected, stored, or transmitted. The browser extension persists only a
+per-site enable/disable setting locally. See [docs/PRIVACY.md](./docs/PRIVACY.md).
 
 ## Security & privacy documentation
 
@@ -97,12 +134,72 @@ npm run lint
 
 # Run tests
 npm test
+```
 
-# Run the demo app
+### Run the demo app
+
+```bash
 npm run dev:demo
+```
 
-# Build the browser extension
+This starts the Vite + React playground where you can paste Hebrew, Arabic,
+English, mixed text, code, math, and tables and watch detection, previews, and
+sanitization update live.
+
+### Build & load the browser extension
+
+```bash
+# Build the extension into packages/browser-extension/dist
 npm run build --workspace @rtl-safe-ai/browser-extension
+```
+
+Then load it unpacked:
+
+1. Open `chrome://extensions` (or `edge://extensions`).
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select `packages/browser-extension/dist`.
+
+See [docs/EXTENSION_SECURITY.md](./docs/EXTENSION_SECURITY.md) for the permission
+model and limitations.
+
+## Using the core package
+
+`@rtl-safe-ai/core` is a pure, dependency-free engine:
+
+```ts
+import {
+  detect,
+  segmentText,
+  toRenderHint,
+  stripUnsafeControls,
+  isPlainTextSafe,
+  VERSION,
+} from '@rtl-safe-ai/core';
+
+const text = 'בדקו את https://example.com לפני שתמשיכו';
+
+const result = detect(text);
+// { direction: 'rtl', script: 'hebrew', rtlRatio: 0.9, isMixed: true, confidence: ... }
+
+const hint = toRenderHint(result.direction);
+// { direction: 'rtl', unicodeBidi: 'plaintext', textAlign: 'start' }
+
+const segments = segmentText('שלום $E=mc^2$ עולם');
+// [{ kind: 'text', direction: 'rtl', ... }, { kind: 'math', direction: 'ltr', ... }, ...]
+
+const safe = stripUnsafeControls(untrustedText); // removes Trojan-Source overrides
+isPlainTextSafe(untrustedText); // false if hidden/override characters are present
+
+console.log(VERSION); // '0.1.0'
+```
+
+Apply the hint with safe DOM APIs only (attributes + `style`), never `innerHTML`:
+
+```ts
+el.textContent = safe;
+el.setAttribute('dir', hint.direction);
+el.style.unicodeBidi = hint.unicodeBidi;
+el.style.textAlign = hint.textAlign;
 ```
 
 ## Packages
@@ -113,11 +210,18 @@ npm run build --workspace @rtl-safe-ai/browser-extension
 | [`@rtl-safe-ai/browser-extension`](./packages/browser-extension) | MV3 extension. |
 | [`@rtl-safe-ai/demo`](./apps/demo) | Vite + React demo. |
 
+## Roadmap
+
+See [ROADMAP.md](./ROADMAP.md) for planned work and explicit non-goals.
+
 ## Contributing
 
-Contributions are welcome. Please read [docs/architecture.md](./docs/architecture.md)
-and keep every change within the security principles above — they are validated
-by lint and CI.
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) and
+[docs/architecture.md](./docs/architecture.md), and keep every change within the
+security principles above — they are validated by lint and CI. By participating
+you agree to our [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+For releases, follow [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
 
 ## License
 

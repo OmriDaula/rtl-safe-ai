@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement or new capability.
+title: '[Feature]: '
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals that keep the project local-only, dependency-light, and
+        privacy-first are especially welcome.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What problem would this solve? Who benefits?
+      placeholder: Mixed Hebrew/English tables are hard to read because …
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior or API you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about and why they fall short.
+    validations:
+      required: false
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      description: Please confirm the proposal respects the project's guarantees.
+      options:
+        - label: This does not require network access, telemetry, or analytics.
+          required: true
+        - label: This does not require unsafe DOM APIs (e.g. innerHTML) or eval.
+          required: true

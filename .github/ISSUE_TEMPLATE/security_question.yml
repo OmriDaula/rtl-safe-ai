@@ -1,0 +1,36 @@
+name: Security question
+description: Ask a non-sensitive question about the project's security or privacy.
+title: '[Security question]: '
+labels: [security, question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ Do not report vulnerabilities here
+
+        If you believe you have found a **vulnerability**, please report it
+        privately instead of opening a public issue — see
+        [SECURITY.md](../../SECURITY.md) (use the GitHub "Report a vulnerability"
+        flow). Public issues are for **general** security/privacy questions only.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This is a general question and does NOT disclose a vulnerability.
+          required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: Ask about the threat model, privacy behavior, permissions, etc.
+      placeholder: How does the extension decide which fields to process?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant documentation reviewed
+      description: Which docs have you already read? (SECURITY, PRIVACY, THREAT_MODEL …)
+    validations:
+      required: false

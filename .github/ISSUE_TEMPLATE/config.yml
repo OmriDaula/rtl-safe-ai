@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/OmriDaula/rtl-safe-ai/security/advisories/new
+    about: Please disclose vulnerabilities privately, not as public issues.
+  - name: Security policy
+    url: https://github.com/OmriDaula/rtl-safe-ai/blob/main/SECURITY.md
+    about: How to report issues and what is in scope.

@@ -1,0 +1,10 @@
+# Default owner for everything in the repository.
+# Update this list as the maintainer team grows.
+*       @OmriDaula
+
+# Security-sensitive areas — review carefully.
+/SECURITY.md            @OmriDaula
+/docs/                  @OmriDaula
+/.github/               @OmriDaula
+/packages/core/         @OmriDaula
+/packages/browser-extension/  @OmriDaula
