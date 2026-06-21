@@ -1,30 +1,35 @@
+import { BIDI_CONTROLS, UNSAFE_BIDI_CONTROLS } from './constants.js';
 import type { WrapOptions } from './types.js';
+
+const UNSAFE_CONTROL_RE = new RegExp(`[${UNSAFE_BIDI_CONTROLS.join('')}]`, 'g');
 
 /**
  * Wrap text in Unicode bidi isolates so it renders correctly when embedded in
- * content of the opposite direction (the core fix for "leaking" directionality
- * in chat bubbles).
+ * content of the opposite direction.
  *
- * Placeholder: returns the input unchanged. The real implementation will wrap
- * with FSI…PDI (or LRI/RLI when direction is forced) per {@link WrapOptions}.
+ * - `direction: 'rtl' | 'ltr'` → forces RLI/LRI … PDI.
+ * - otherwise → First-Strong Isolate (FSI … PDI), letting the renderer decide.
+ * - `isolation: 'none'` → returns the input unchanged.
  *
- * This function never executes code and never touches the DOM — it only
- * transforms a string.
- *
- * @param text Text to isolate.
- * @param _options Wrapping strategy.
+ * This only transforms a string; it never touches the DOM or executes code.
  */
-export function wrapIsolated(text: string, _options: WrapOptions = {}): string {
-  return text;
+export function wrapIsolated(text: string, options: WrapOptions = {}): string {
+  if (options.isolation === 'none') return text;
+
+  const open =
+    options.direction === 'rtl'
+      ? BIDI_CONTROLS.RLI
+      : options.direction === 'ltr'
+        ? BIDI_CONTROLS.LRI
+        : BIDI_CONTROLS.FSI;
+
+  return open + text + BIDI_CONTROLS.PDI;
 }
 
 /**
- * Strip dangerous bidi override/embedding controls (the "Trojan Source" class)
- * while preserving legitimate marks.
- *
- * Placeholder: returns the input unchanged. The real implementation will remove
- * characters listed in {@link UNSAFE_BIDI_CONTROLS}.
+ * Remove dangerous bidi embedding/override controls (the "Trojan Source" class:
+ * LRE/RLE/PDF/LRO/RLO) while preserving legitimate marks and isolates.
  */
 export function stripUnsafeControls(text: string): string {
-  return text;
+  return text.replace(UNSAFE_CONTROL_RE, '');
 }

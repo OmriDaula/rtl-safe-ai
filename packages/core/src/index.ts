@@ -6,22 +6,44 @@
  * Design constraints (enforced by lint + review):
  * - No network access, no telemetry, no analytics.
  * - No eval / dynamic code execution.
- * - No DOM mutation via innerHTML; string transforms only.
+ * - No DOM access and no `innerHTML`; pure string/value transforms only.
  * - Pure, synchronous, deterministic functions.
  */
 
 export type {
   Direction,
+  StrongDirection,
   ScriptId,
+  TextRange,
+  SegmentKind,
+  Segment,
   DetectionResult,
+  TableDirectionResult,
   DetectOptions,
   WrapOptions,
   RenderHint,
 } from './types.js';
 
-export { BIDI_CONTROLS, UNSAFE_BIDI_CONTROLS, SCRIPT_RANGES } from './constants.js';
+export {
+  BIDI_CONTROLS,
+  UNSAFE_BIDI_CONTROLS,
+  INVISIBLE_CONTROLS,
+  RTL_SCRIPT_RANGES,
+} from './constants.js';
 
-export { detect, isRtl } from './detect.js';
+export {
+  detect,
+  detectTextDirection,
+  isRtl,
+  isRTLCodePoint,
+  hasRTL,
+  firstStrongDirection,
+  rtlRatio,
+  stripLeadingLTRNoise,
+} from './detect.js';
+export { segmentText } from './segment.js';
+export { detectLatexRanges } from './latex.js';
+export { detectTableDirection } from './table.js';
 export { toRenderHint, resolveAuto } from './direction.js';
 export { wrapIsolated, stripUnsafeControls } from './bidi.js';
 export { neutralizeInvisible, isPlainTextSafe } from './sanitize.js';
