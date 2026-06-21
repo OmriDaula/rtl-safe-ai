@@ -8,15 +8,50 @@
   </head>
   <body>
     <main class="popup">
-      <h1 class="popup__title">RTL Safe AI</h1>
-      <p class="popup__subtitle">Local-only RTL fixes. No telemetry, no network.</p>
+      <header class="popup__header">
+        <h1 class="popup__title">RTL Safe AI</h1>
+        <span class="popup__version" id="version">v0.0.0</span>
+      </header>
+      <p class="popup__subtitle">Secure RTL for Hebrew, Arabic &amp; bidirectional AI text</p>
 
-      <label class="popup__row">
-        <span>Enable on this site</span>
-        <input id="toggle-enabled" type="checkbox" checked />
-      </label>
+      <section class="site" aria-label="Current site">
+        <div class="site__row">
+          <span class="site__label">Site</span>
+          <span class="site__host" id="site-host">—</span>
+        </div>
+        <span class="site__tag" id="site-tag"></span>
+      </section>
 
-      <p id="status" class="popup__status" role="status"></p>
+      <button type="button" class="toggle" id="toggle" aria-pressed="true">
+        Disable on this site
+      </button>
+      <p class="status" id="status" role="status"></p>
+
+      <section class="card">
+        <h2 class="card__title">What it does</h2>
+        <ul class="features">
+          <li>Hebrew / Arabic RTL detection</li>
+          <li>Mixed Hebrew/Arabic + English text</li>
+          <li>Code and math stay LTR</li>
+          <li>Safe text sanitization (bidi &amp; hidden controls)</li>
+        </ul>
+      </section>
+
+      <section class="card card--security">
+        <h2 class="card__title">Privacy</h2>
+        <p class="security">Local-only processing. No telemetry. No network requests.</p>
+      </section>
+
+      <footer class="popup__footer">
+        <a
+          id="repo"
+          class="link"
+          href="https://github.com/rtl-safe-ai/rtl-safe-ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub repository</a
+        >
+      </footer>
     </main>
     <script type="module" src="popup.js"></script>
   </body>

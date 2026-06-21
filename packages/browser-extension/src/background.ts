@@ -1,25 +1,22 @@
 /**
  * MV3 service worker.
  *
- * Responsibilities (planned):
- * - Persist user preferences via `chrome.storage.local` (local-only).
- * - Relay enable/disable toggles to content scripts.
+ * Responsibilities:
+ * - Seed default settings on install (local storage only).
  *
- * This worker performs NO network requests and accesses NO credentials.
+ * This worker performs NO network requests, reads NO page content, and accesses
+ * NO cookies or credentials.
  */
 
-const DEFAULT_SETTINGS = {
-  enabled: true,
-  isolation: 'unicode' as const,
-};
+import { STORAGE_KEY } from './settings.js';
 
 chrome.runtime.onInstalled.addListener(() => {
-  // Seed defaults only if nothing is stored yet. Local storage only.
-  chrome.storage.local.get('settings', (current) => {
-    if (!current || current.settings === undefined) {
-      void chrome.storage.local.set({ settings: DEFAULT_SETTINGS });
+  void (async () => {
+    const stored = await chrome.storage.local.get(STORAGE_KEY);
+    if (stored[STORAGE_KEY] === undefined) {
+      await chrome.storage.local.set({ [STORAGE_KEY]: { siteOverrides: {} } });
     }
-  });
+  })();
 });
 
 export {};

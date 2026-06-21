@@ -6,8 +6,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch --mode development",
-    "build": "tsc --build && vite build",
+    "dev": "vite build --mode pages && vite build --mode content --watch",
+    "build": "tsc --build && vite build --mode pages && vite build --mode content",
     "typecheck": "tsc --noEmit",
     "preview": "echo \"Load the dist/ folder via chrome://extensions (Developer mode → Load unpacked).\""
   },

@@ -4,9 +4,10 @@ import { defineConfig } from 'vite';
 
 const root = __dirname;
 const outDir = resolve(root, 'dist');
+const coreAlias = { '@rtl-safe-ai/core': resolve(root, '../core/src/index.ts') };
 
 /**
- * Copies static assets (manifest, popup HTML, icons) into the build output.
+ * Copies static assets (manifest, popup HTML/CSS, icons) into the build output.
  * Kept inline to avoid an extra dependency.
  */
 function copyStaticAssets() {
@@ -24,30 +25,54 @@ function copyStaticAssets() {
   };
 }
 
-export default defineConfig({
-  resolve: {
-    alias: {
-      '@rtl-safe-ai/core': resolve(root, '../core/src/index.ts'),
-    },
-  },
-  build: {
-    outDir,
-    emptyOutDir: true,
-    sourcemap: true,
-    target: 'es2022',
-    rollupOptions: {
-      // Each MV3 entry point must be a stable, top-level file in dist/.
-      input: {
-        background: resolve(root, 'src/background.ts'),
-        content: resolve(root, 'src/content.ts'),
-        popup: resolve(root, 'src/popup/popup.ts'),
+/**
+ * Two build targets share one `dist/`:
+ * - `--mode content`: the content script, bundled as a self-contained IIFE
+ *   (MV3 content scripts are classic scripts and cannot use ES `import`).
+ * - default: the service worker + popup, which are ES modules and may share
+ *   chunks freely. This pass also copies the static assets and cleans `dist/`.
+ */
+export default defineConfig(({ mode }) => {
+  if (mode === 'content') {
+    return {
+      resolve: { alias: coreAlias },
+      build: {
+        outDir,
+        emptyOutDir: false,
+        sourcemap: true,
+        target: 'es2022',
+        rollupOptions: {
+          input: { content: resolve(root, 'src/content.ts') },
+          output: {
+            format: 'iife',
+            name: 'rtlSafeAiContent',
+            entryFileNames: 'content.js',
+            inlineDynamicImports: true,
+          },
+        },
       },
-      output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: 'chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
+    };
+  }
+
+  return {
+    resolve: { alias: coreAlias },
+    build: {
+      outDir,
+      emptyOutDir: true,
+      sourcemap: true,
+      target: 'es2022',
+      rollupOptions: {
+        input: {
+          background: resolve(root, 'src/background.ts'),
+          popup: resolve(root, 'src/popup/popup.ts'),
+        },
+        output: {
+          entryFileNames: '[name].js',
+          chunkFileNames: 'chunks/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash][extname]',
+        },
       },
     },
-  },
-  plugins: [copyStaticAssets()],
+    plugins: [copyStaticAssets()],
+  };
 });
