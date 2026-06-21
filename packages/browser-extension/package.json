@@ -1,0 +1,21 @@
+{
+  "name": "@rtl-safe-ai/browser-extension",
+  "version": "0.1.0",
+  "description": "Manifest V3 browser extension that applies local-only RTL fixes to AI chat interfaces.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "tsc --build && vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "echo \"Load the dist/ folder via chrome://extensions (Developer mode → Load unpacked).\""
+  },
+  "dependencies": {
+    "@rtl-safe-ai/core": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.270",
+    "vite": "^8.0.16"
+  }
+}

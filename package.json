@@ -1,0 +1,39 @@
+{
+  "name": "rtl-safe-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Security-first, local-only RTL engine for Hebrew, Arabic, Persian, Urdu, Yiddish and other right-to-left languages in AI chat interfaces.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev:demo": "npm run dev --workspace apps/demo",
+    "dev:extension": "npm run dev --workspace @rtl-safe-ai/browser-extension",
+    "typecheck": "tsc --build --verbose",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rimraf \"packages/*/dist\" \"apps/*/dist\" \"**/*.tsbuildinfo\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@types/node": "^20.16.0",
+    "eslint": "^9.13.0",
+    "fast-glob": "^3.3.2",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.10.0",
+    "vitest": "^4.1.9"
+  }
+}

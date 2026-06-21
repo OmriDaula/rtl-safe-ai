@@ -1,0 +1,37 @@
+{
+  "name": "@rtl-safe-ai/core",
+  "version": "0.1.0",
+  "description": "Local-only, dependency-free RTL detection and bidi-safe text utilities for AI chat interfaces.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "rtl",
+    "bidi",
+    "hebrew",
+    "arabic",
+    "persian",
+    "urdu",
+    "yiddish",
+    "unicode",
+    "accessibility"
+  ]
+}

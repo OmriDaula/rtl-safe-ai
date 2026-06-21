@@ -1,0 +1,39 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.popup {
+  width: 260px;
+  padding: 16px;
+}
+
+.popup__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.popup__subtitle {
+  margin: 0 0 16px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.popup__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.popup__status {
+  margin-top: 12px;
+  min-height: 1em;
+  font-size: 12px;
+  opacity: 0.8;
+}
