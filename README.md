@@ -103,6 +103,7 @@ certification.
 | [docs/SUPPLY_CHAIN.md](./docs/SUPPLY_CHAIN.md) | Dependency and release supply-chain practices. |
 | [docs/EXTENSION_SECURITY.md](./docs/EXTENSION_SECURITY.md) | Browser-extension security model. |
 | [docs/RELEASE_SECURITY.md](./docs/RELEASE_SECURITY.md) | Pre-release security checklist. |
+| [docs/SECURITY_REVIEW.md](./docs/SECURITY_REVIEW.md) | Pre-release security review report. |
 
 ## Repository layout
 
@@ -117,6 +118,28 @@ rtl-safe-ai/
 ├── tests/                   # Cross-package tests & security invariants
 └── ...root configs
 ```
+
+## Architecture
+
+One **pure engine** with thin consumers. The core does all the logic as
+side-effect-free string/value functions; only the extension and demo touch the
+DOM, and they do so with safe APIs (`textContent`, attributes, inline styles).
+
+```
+              ┌────────────────────────────┐
+              │      @rtl-safe-ai/core      │
+              │  pure · local-only · no I/O │
+              └─────────────┬──────────────┘
+                ┌───────────┴───────────┐
+        ┌───────┴───────┐       ┌────────┴────────┐
+        │ browser-ext   │       │    demo app     │
+        │ (Manifest V3) │       │ (Vite + React)  │
+        └───────────────┘       └─────────────────┘
+```
+
+The core is intentionally small enough to audit in one sitting. See
+[docs/architecture.md](./docs/architecture.md) for module responsibilities and
+data flow.
 
 ## Getting started
 
@@ -213,6 +236,27 @@ el.style.textAlign = hint.textAlign;
 ## Roadmap
 
 See [ROADMAP.md](./ROADMAP.md) for planned work and explicit non-goals.
+
+## Why this project matters (portfolio value)
+
+This repository is also a portfolio project. It was built to solve a real,
+everyday problem for Hebrew and Arabic speakers using AI tools, and it
+demonstrates a range of practical engineering skills:
+
+| Area | What it shows |
+| --- | --- |
+| **TypeScript** | Strict, typed, dependency-free library design with a clean public API. |
+| **React** | A focused, accessible Vite + React demo UI. |
+| **Browser extensions** | A Manifest V3 extension with a content script, service worker, and popup. |
+| **Unicode / bidi** | Practical handling of bidirectional text, scripts, and Trojan-Source defenses. |
+| **Security-first engineering** | Lint rules + tests that enforce "no network / no eval / no HTML sinks". |
+| **Testing discipline** | 111 tests, including security invariant and regression tests. |
+| **CI/CD** | GitHub Actions, CodeQL, and tuned Dependabot. |
+| **Documentation** | A full security, privacy, threat-model, and supply-chain doc layer. |
+| **Privacy-first product thinking** | Local-only processing with no telemetry or data collection. |
+
+For a short project summary, CV bullets, and an interview-ready explanation, see
+[docs/PORTFOLIO_SUMMARY.md](./docs/PORTFOLIO_SUMMARY.md).
 
 ## Contributing
 

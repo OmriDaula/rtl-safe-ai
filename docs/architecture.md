@@ -54,7 +54,7 @@ consumers.
 A React playground that calls the core directly and previews results. Useful for
 manual QA of detection and rendering.
 
-## Data flow (planned)
+## Data flow
 
 ```
 page text ──▶ core.detect() ──▶ DetectionResult
