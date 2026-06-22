@@ -23,6 +23,7 @@ const securityRules = {
     { property: 'innerHTML', message: 'Use textContent / safe DOM APIs instead of innerHTML.' },
     { property: 'outerHTML', message: 'Use safe DOM APIs instead of outerHTML.' },
     { property: 'insertAdjacentHTML', message: 'Use safe DOM APIs instead of insertAdjacentHTML.' },
+    { property: 'sendBeacon', message: 'Network/telemetry calls are forbidden: rtl-safe-ai is local-only.' },
   ],
   'no-restricted-syntax': [
     'error',

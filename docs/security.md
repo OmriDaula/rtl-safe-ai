@@ -21,6 +21,7 @@ Directorate (INCD) supply-chain guidance.
 | [SUPPLY_CHAIN.md](./SUPPLY_CHAIN.md) | Dependency and release supply-chain practices. |
 | [EXTENSION_SECURITY.md](./EXTENSION_SECURITY.md) | Browser-extension security model. |
 | [RELEASE_SECURITY.md](./RELEASE_SECURITY.md) | Pre-release security checklist. |
+| [SECURITY_REVIEW.md](./SECURITY_REVIEW.md) | Pre-release security review report. |
 | [architecture.md](./architecture.md) | System architecture. |
 
 ## Design goals
