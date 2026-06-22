@@ -8,33 +8,56 @@ updates:
       interval: weekly
       day: monday
       time: '06:00'
-    open-pull-requests-limit: 10
+    # Cap concurrent PRs to keep the review queue small and focused. A low limit
+    # avoids a flood of simultaneous updates and keeps maintenance manageable.
+    open-pull-requests-limit: 3
     labels:
       - dependencies
+      - maintenance
+      - security-reviewed
     commit-message:
       prefix: deps
       prefix-development: deps-dev
+    # Bundle low-risk minor/patch bumps into a single PR. Grouping reduces noise
+    # and review overhead because these updates are backward-compatible by semver
+    # and can be verified together by CI.
     groups:
-      # Bundle low-risk minor/patch bumps into a single PR.
       minor-and-patch:
         update-types:
           - minor
           - patch
+    # Ignore semver-major updates for now. The project is pre-release and
+    # prioritizes stability; majors can carry breaking changes and are adopted
+    # deliberately, not automatically.
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
 
-  # GitHub Actions used by the workflows above.
+  # GitHub Actions used by the workflows.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
       time: '06:00'
+    # Lower limit than npm: Actions change less often, so fewer PRs are expected.
+    open-pull-requests-limit: 2
     labels:
-      - ci
       - dependencies
+      - maintenance
+      - security-reviewed
     commit-message:
       prefix: ci
+    # Group minor/patch Action bumps into a single, easy-to-review PR.
     groups:
       actions:
         update-types:
           - minor
           - patch
+    # Ignore major Action updates for now to avoid breaking workflows before
+    # release; majors are reviewed and applied manually.
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
